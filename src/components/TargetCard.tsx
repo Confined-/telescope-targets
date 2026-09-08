@@ -99,7 +99,7 @@ function ScoreBar({ label, value }: { label: string; value: number }) {
   );
 }
 
-function AltChart({
+export function AltChart({
   curve,
   bestTime,
   tzOffsetMin,

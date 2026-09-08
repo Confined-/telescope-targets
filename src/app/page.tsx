@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import TargetCard, { type Target } from "@/components/TargetCard";
+import TransientCard from "@/components/TransientCard";
 import { CATEGORY_LABELS } from "@/lib/catalog-types";
 import { altAz } from "@/lib/astro";
 import { fmtTime, localToday, moonPhaseName } from "@/lib/format";
@@ -63,6 +64,15 @@ const ALL_TYPES = Object.keys(CATEGORY_LABELS).filter(
 const inputCls =
   "w-full rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-base text-zinc-100 placeholder:text-zinc-500 focus:border-indigo-400 focus:outline-none";
 const labelCls = "mb-1 block text-xs font-medium text-zinc-400";
+
+// Fallbacks for the transient altitude track when night-window meta is
+// missing (module scope: impure, must not run during render).
+const FALLBACK_NIGHT_START = new Date(
+  Date.now() - 12 * 3600 * 1000
+).toISOString();
+const FALLBACK_NIGHT_END = new Date(
+  Date.now() + 12 * 3600 * 1000
+).toISOString();
 
 export default function Home() {
   const [city, setCity] = useState("");
@@ -896,39 +906,29 @@ export default function Home() {
                   now — uncheck “Visible now” to see what&apos;s coming later.
                 </p>
               )}
-              <div className="grid gap-3 md:grid-cols-2">
-                {visibleEventsNow.map((t) => (
-                    <div
-                      key={t.name}
-                      className="rounded-xl border border-red-500/25 bg-zinc-900/60 p-4"
-                    >
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-semibold text-zinc-100">
-                          {t.display}
-                        </span>
-                        <span className="rounded-full border border-red-500/30 bg-red-500/10 px-2 py-0.5 text-[11px] font-medium text-red-300">
-                          mag {t.mag?.toFixed(1) ?? "?"}
-                        </span>
-                        <span className="rounded-full border border-zinc-700 px-2 py-0.5 text-[11px] text-zinc-300">
-                          Type {t.snType}
-                        </span>
-                      </div>
-                      <p className="mt-1 text-xs text-zinc-400">
-                        In {t.host} · found {t.discovered} · peaks{" "}
-                        {t.peakAlt.toFixed(0)}°
-                        {t.bestTime ? ` at ${fmtTime(t.bestTime, tz)}` : ""} ·
-                        Moon {t.moonSep?.toFixed(0) ?? "—"}° away
-                      </p>
-                      <a
-                        href={t.tns}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="mt-1 inline-block text-xs font-medium text-indigo-300 hover:text-indigo-200"
-                      >
-                        Transient Name Server ↗
-                      </a>
-                    </div>
-                  ))}
+              <div className="space-y-3">
+                {visibleEventsNow.map((t, i) => (
+                  <TransientCard
+                    key={t.name}
+                    event={t}
+                    index={i}
+                    lat={latNum}
+                    lon={lonNum}
+                    tzOffsetMin={tz}
+                    fovDeg={meta?.trueFovDeg ?? 1.5}
+                    darkStart={
+                      meta?.astroDarkStart ??
+                      meta?.nauticalDarkStart ??
+                      meta?.sunset ??
+                      t.bestTime ??
+                      new Date().toISOString()
+                    }
+                    date={meta?.date ?? date}
+                    nightStart={meta?.sunset ?? FALLBACK_NIGHT_START}
+                    nightEnd={meta?.sunrise ?? FALLBACK_NIGHT_END}
+                    night={night}
+                  />
+                ))}
               </div>
             </div>
           )}
