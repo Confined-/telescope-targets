@@ -462,7 +462,7 @@ export default function Home() {
   };
 
   return (
-    <div className={`min-h-full bg-zinc-950 text-zinc-100 ${night ? "night-mode" : ""}`}>
+    <div className={`min-h-screen flex flex-col bg-zinc-950 text-zinc-100 ${night ? "night-mode" : ""}`}>
       {!mounted && (
         <div className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-3 bg-zinc-950">
           <div className="h-8 w-8 animate-spin rounded-full border-2 border-zinc-700 border-t-indigo-400" />
@@ -503,7 +503,7 @@ export default function Home() {
         </div>
       </header>
 
-      <main className="mx-auto grid max-w-6xl gap-6 px-4 py-6 lg:grid-cols-[340px_1fr]">
+      <main className="mx-auto grid w-full max-w-6xl flex-1 gap-6 px-4 py-6 lg:grid-cols-[340px_1fr]">
         <form
           onSubmit={onSubmit}
           className="space-y-5 self-start rounded-xl border border-zinc-800 bg-zinc-900/60 p-4"
