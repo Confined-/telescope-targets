@@ -19,19 +19,47 @@
   }
 }
 
+:root {
+  color-scheme: dark;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
 
+/* Dark native scrollbars so no white OS chrome leaks at night. */
+* {
+  scrollbar-color: #3f3f46 #09090b;
+}
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: #09090b;
+}
+::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 5px;
+}
+
 /*
- * Night-vision mode: collapse everything to dim red luminance so no
- * green/blue/white photons reach dark-adapted eyes. Applied to the app
- * root; canvas, photos and charts are filtered like any other pixels.
- * (Native date-picker popups are OS-rendered and unaffected — brief.)
+ * Night-vision mode: an SVG luminance-to-red matrix — every pixel's
+ * brightness is preserved but emitted as pure red only, so no
+ * green/blue/white photons reach dark-adapted eyes and nothing
+ * disappears (unlike multiply overlays, which eat green UI).
+ * Applied to the app root; canvas, photos and charts are filtered
+ * like any other pixels. (Native date-picker popups are OS-rendered
+ * and unaffected — brief.)
  */
 .night-mode {
-  filter: grayscale(100%) sepia(100%) hue-rotate(-45deg) saturate(3.2)
-    brightness(0.8);
+  filter: grayscale(100%) sepia(100%) hue-rotate(-50deg) saturate(6)
+    brightness(0.72);
+}
+@supports (filter: url(#night-red)) {
+  .night-mode {
+    filter: url(#night-red);
+  }
 }
