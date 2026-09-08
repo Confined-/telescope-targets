@@ -24,3 +24,14 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/*
+ * Night-vision mode: collapse everything to dim red luminance so no
+ * green/blue/white photons reach dark-adapted eyes. Applied to the app
+ * root; canvas, photos and charts are filtered like any other pixels.
+ * (Native date-picker popups are OS-rendered and unaffected — brief.)
+ */
+.night-mode {
+  filter: grayscale(100%) sepia(100%) hue-rotate(-45deg) saturate(3.2)
+    brightness(0.8);
+}

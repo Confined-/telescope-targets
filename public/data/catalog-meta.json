@@ -1,0 +1,19 @@
+{
+  "source": "OpenNGC (https://github.com/mattiaverga/OpenNGC)",
+  "sourceLicense": "CC-BY-SA-4.0 (see OpenNGC repo)",
+  "builtAt": "2026-09-04T21:21:41.425Z",
+  "count": 13960,
+  "skipped": 10,
+  "types": {
+    "star": 1443,
+    "galaxy": 10750,
+    "other": 419,
+    "nebula": 233,
+    "association": 62,
+    "open-cluster": 652,
+    "planetary-nebula": 130,
+    "cluster-nebula": 67,
+    "globular-cluster": 204
+  },
+  "fields": "id=OpenNGC name, t=category, ra/dec=deg(J2000), m=mag(V or B-0.7 est, null if unknown), me=mag source(0=V,1=CstarV,2=Best,3=CstarBest), maj/min=arcmin, sb=mag/arcsec^2, con=constellation, mes=Messier no, cn=common name"
+}
